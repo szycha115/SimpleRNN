@@ -41,12 +41,20 @@ if st.button('Classify'):
         st.warning('Please enter a movie review.')
     else:
         preprocessed_input = preprocess_text(user_input)
-        prediction = model.predict(preprocessed_input)
-        sentiment = 'Positive' if prediction[0][0] > 0.5 else 'Negative'
-        score = float(prediction[0][0])
+        
+        # Ensure the input has the correct shape and data type
+        preprocessed_input = np.array(preprocessed_input, dtype=np.float32)
 
-        st.subheader('🔍 Result')
-        st.write(f'**Sentiment:** {sentiment}')
-        st.write(f'**Prediction Score:** {score:.4f}')
+        # Make prediction
+        try:
+            prediction = model.predict(preprocessed_input)
+            sentiment = 'Positive' if prediction[0][0] > 0.5 else 'Negative'
+            score = float(prediction[0][0])
+
+            st.subheader('🔍 Result')
+            st.write(f'**Sentiment:** {sentiment}')
+            st.write(f'**Prediction Score:** {score:.4f}')
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
 else:
     st.info('Waiting for input...')
