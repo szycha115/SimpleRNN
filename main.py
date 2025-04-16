@@ -9,6 +9,7 @@ import re
 
 # Constants
 MAX_LEN = 500
+MAX_VOCAB_SIZE = 10000
 
 # Load the IMDB word index
 word_index = imdb.get_word_index()
@@ -23,9 +24,13 @@ def decode_review(encoded_review):
 
 def preprocess_text(text):
     # Clean and tokenize
-    text = re.sub(r'[^\w\s]', '', text.lower())
+    text = re.sub(r'[^\w\s]', '', text.lower())  # Remove punctuation and convert to lowercase
     words = text.split()
-    encoded_review = [word_index.get(word, 2) for word in words]  # No +3
+    
+    # Encode the words while ensuring out-of-vocabulary words get assigned index `1`
+    encoded_review = [word_index.get(word, 1) for word in words]  # 1 for out-of-vocabulary words
+    
+    # Ensure the review is padded to the max length
     padded_review = sequence.pad_sequences([encoded_review], maxlen=MAX_LEN)
     return padded_review
 
