@@ -10,8 +10,9 @@ word_index = imdb.get_word_index()
 reverse_word_index = {value: key for key, value in word_index.items()}
 
 # Load the pre-trained model with ReLU activation
-from tensorflow.keras.layers import SimpleRNN
-model = load_model('simple_rnn_imdb.h5', custom_objects={'SimpleRNN': SimpleRNN})
+from tensorflow.keras.models import load_model
+model = load_model('simple_rnn_imdb.keras')
+
 
 
 # Step 2: Helper Functions
